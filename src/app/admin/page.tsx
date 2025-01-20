@@ -4,11 +4,11 @@ import Image from "next/image";
 export default function Page() {
   return (
     <div className="w-full flex flex-col md:flex-row">
-      <div className="first hidden md:flex w-[25%] lg:w-[20%]">
+      <div className="lg:hidden md:block w-[25%] lg:w-[20%]">
         <Image src={"/Nav Bar.png"} alt="Nav Bar" width={360} height={1600} />
       </div>
-      <div className="sec hidden md:flex w-full md:w-[75%] lg:w-[80%] bg-[#f6f7f9] p-4 sm:p-6 gap-7 flex-nowrap justify-center">
-        <Image
+      <div className="sec md:flex w-full md:w-[75%] lg:w-[80%] bg-[#f6f7f9] p-4 sm:p-6 gap-7 flex-nowrap justify-center">
+      <Image
           src={"/Details Rental.png"}
           alt="Details Rental"
           width={534}
