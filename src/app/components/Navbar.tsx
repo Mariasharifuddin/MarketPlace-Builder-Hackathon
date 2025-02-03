@@ -1,7 +1,8 @@
-import React from 'react';
-import Image from 'next/image';
+"use client";
+import { useState } from "react";
+import Image from "next/image";
 
-export default function Navbar() {
+export default function Navbar({ cartCount, wishlistCount }: { cartCount: number, wishlistCount: number }) {
   return (
     <div className='w-full bg-white h-auto flex flex-col md:flex-row items-center justify-between p-4 md:p-8 border-b-2 border-b-[#e7eef6]'>
       <div className="first flex flex-col md:flex-row items-center gap-4 md:gap-16">
@@ -17,8 +18,16 @@ export default function Navbar() {
           <Image src={'/filter.png'} alt='' width={24} height={24} className='absolute top-1/2 right-3 transform -translate-y-1/2'/>
         </div>
       </div>
-      <div className="icons mt-4 md:mt-0">
-        <Image src={'/Profil & Notification.png'} alt='' width={236} height={44} />
+      <div className="icons mt-4 md:mt-0 flex gap-4">
+        <div>
+          <p>Cart {cartCount}</p>
+        </div>
+        <div>
+          <p>Wishlist {wishlistCount}</p>
+        </div>
+        <div>
+          <Image src={'/Profil & Notification.png'} alt='' width={236} height={44} />
+        </div>
       </div>
     </div>
   );
