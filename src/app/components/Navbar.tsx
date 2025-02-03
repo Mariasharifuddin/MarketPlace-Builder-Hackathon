@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Image from "next/image";
 
-export default function Navbar({ cartCount, wishlistCount }: { cartCount: number, wishlistCount: number }) {
+export default function Navbar() {
   return (
     <div className='w-full bg-white h-auto flex flex-col md:flex-row items-center justify-between p-4 md:p-8 border-b-2 border-b-[#e7eef6]'>
       <div className="first flex flex-col md:flex-row items-center gap-4 md:gap-16">
@@ -19,12 +19,6 @@ export default function Navbar({ cartCount, wishlistCount }: { cartCount: number
         </div>
       </div>
       <div className="icons mt-4 md:mt-0 flex gap-4">
-        <div>
-          <p>Cart {cartCount}</p>
-        </div>
-        <div>
-          <p>Wishlist {wishlistCount}</p>
-        </div>
         <div>
           <Image src={'/Profil & Notification.png'} alt='' width={236} height={44} />
         </div>
