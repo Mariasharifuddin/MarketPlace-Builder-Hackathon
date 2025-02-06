@@ -3,7 +3,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { client, urlFor } from "@/app/lib/sanity";
+import { client} from "@/sanity/lib/client";
+import { urlFor } from "@/sanity/lib/image";
 
 interface Car {
   _id: string;
@@ -51,7 +52,7 @@ export default function Payment({ params }: { params: { slug: string } }) {
   }, [params.slug]);
 
   if (loading) {
-    return <div className="w-full h-screen flex items-center justify-center text-lg">Fetching car details...</div>;
+    return <div className="w-full h-screen flex items-center justify-center text-lg">Fetching car details....</div>;
   }
 
   if (!car) {
