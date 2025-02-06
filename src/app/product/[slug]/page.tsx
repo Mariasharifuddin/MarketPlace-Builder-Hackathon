@@ -1,6 +1,5 @@
 "use client";
 
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import { useState, useEffect } from "react";
@@ -19,7 +18,7 @@ interface PaymentFormProps {
 
 async function getCarById(slug: string) {
   const cleanSlug = slug.replace(/['"]+/g, "");
-  const query = `*[_type == "car" && slug.current == "${cleanSlug}"][0]{
+  const query = `*[_type == "car" && slug.current == $slug][0]{
     _id,
     name,
     type,
@@ -27,7 +26,7 @@ async function getCarById(slug: string) {
     pricePerDay,
     originalPrice
   }`;
-  const car = await client.fetch(query);
+  const car = await client.fetch(query, { slug: cleanSlug });
   return car;
 }
 
@@ -35,11 +34,22 @@ export default function Payment({ params }: { params: { slug: string } }) {
   const [car, setCar] = useState<PaymentFormProps["car"] | null>(null);
 
   useEffect(() => {
+    console.log("Params:", params); // Debugging: check params
+    console.log("Slug:", params.slug); // Ensure the slug is correct
+
     async function fetchData() {
-      const result = await getCarById(params.slug);
-      setCar(result);
+      try {
+        const result = await getCarById(params.slug);
+        console.log("Fetched car:", result); // Check the fetched data
+        setCar(result);
+      } catch (error) {
+        console.error("Error fetching car:", error);
+      }
     }
-    fetchData();
+
+    if (params.slug) {
+      fetchData();
+    }
   }, [params.slug]);
 
   if (!car) {
@@ -49,6 +59,7 @@ export default function Payment({ params }: { params: { slug: string } }) {
   const handlePayment = (e: React.FormEvent) => {
     e.preventDefault();
     alert(`Payment successful for ${car.name}!`);
+;
   };
 
   return (
@@ -96,77 +107,76 @@ export default function Payment({ params }: { params: { slug: string } }) {
         <div className="w-full lg:w-[60%] border-2 bg-white p-4 shadow-md rounded-lg border-gray-300">
           <h2 className="text-xl font-bold mb-4">Product Actions</h2>
           <div className="flex flex-col gap-4">
-           
             {/* Payment UI */}
             <form onSubmit={handlePayment} className="mt-6 flex flex-col gap-6">
-  <label className="block">
-    <span className="text-gray-700">Full Name</span>
-    <input
-      type="text"
-      required
-      className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500"
-    />
-  </label>
+              <label className="block">
+                <span className="text-gray-700">Full Name</span>
+                <input
+                  type="text"
+                  required
+                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500"
+                />
+              </label>
 
-  <label className="block">
-    <span className="text-gray-700">Card Number</span>
-    <input
-      type="text"
-      required
-      maxLength={16}
-      placeholder="1234 5678 9012 3456"
-      className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500"
-    />
-  </label>
+              <label className="block">
+                <span className="text-gray-700">Card Number</span>
+                <input
+                  type="text"
+                  required
+                  maxLength={16}
+                  placeholder="1234 5678 9012 3456"
+                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500"
+                />
+              </label>
 
-  <div className="flex gap-4">
-    <label className="block w-1/2">
-      <span className="text-gray-700">Expiry Date</span>
-      <input
-        type="text"
-        required
-        placeholder="MM/YY"
-        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500"
-      />
-    </label>
+              <div className="flex gap-4">
+                <label className="block w-1/2">
+                  <span className="text-gray-700">Expiry Date</span>
+                  <input
+                    type="text"
+                    required
+                    placeholder="MM/YY"
+                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500"
+                  />
+                </label>
 
-    <label className="block w-1/2">
-      <span className="text-gray-700">CVV</span>
-      <input
-        type="text"
-        required
-        maxLength={3}
-        placeholder="123"
-        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500"
-      />
-    </label>
-  </div>
+                <label className="block w-1/2">
+                  <span className="text-gray-700">CVV</span>
+                  <input
+                    type="text"
+                    required
+                    maxLength={3}
+                    placeholder="123"
+                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500"
+                  />
+                </label>
+              </div>
 
-  <label className="block">
-    <span className="text-gray-700">Email Address</span>
-    <input
-      type="email"
-      required
-      className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500"
-    />
-  </label>
+              <label className="block">
+                <span className="text-gray-700">Email Address</span>
+                <input
+                  type="email"
+                  required
+                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500"
+                />
+              </label>
 
-  <label className="block">
-    <span className="text-gray-700">Billing Address</span>
-    <input
-      type="text"
-      required
-      className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500"
-      placeholder="Street, City, Country"
-    />
-  </label>
-  <button
-    type="submit"
-    className="mt-6 bg-indigo-600 text-white py-2 rounded-md shadow-md hover:bg-indigo-500"
-  >
-    Pay Now
-  </button>
-</form>
+              <label className="block">
+                <span className="text-gray-700">Billing Address</span>
+                <input
+                  type="text"
+                  required
+                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500"
+                  placeholder="Street, City, Country"
+                />
+              </label>
+              <button
+                type="submit"
+                className="mt-6 bg-indigo-600 text-white py-2 rounded-md shadow-md hover:bg-indigo-500"
+              >
+                Pay Now
+              </button>
+            </form>
           </div>
         </div>
       </div>
