@@ -1,5 +1,5 @@
 import React, { useState, FormEvent } from "react";
-import { client } from "@/app/lib/sanity";
+import { client } from "@/sanity/lib/client";
 import { v4 as uuidv4 } from 'uuid';
 
 interface PaymentFormProps {
