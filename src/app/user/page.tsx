@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { client } from "@/app/lib/sanity";
+import { client} from "@/sanity/lib/client";
+// import { urlFor } from "@/sanity/lib/image";
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
